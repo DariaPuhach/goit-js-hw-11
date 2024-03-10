@@ -1,10 +1,15 @@
-'use strict';
-
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
+import {BASE_URL, API_KEY, fetchImages} from './js/pixabay-api.js'
+import {createMarkup} from './js/render-function.js'
+
+const simplyGallery = new SimpleLightbox('.gallery-item a', {
+  captionsData: 'alt',
+  captionDelay: 250,
+});
 
 const refs = {
   form: document.querySelector('.search-form'),
@@ -14,12 +19,12 @@ const refs = {
   searchBtn: document.querySelector('.search-btn'),
 };
 
-const BASE_URL = 'https://pixabay.com/api/';
-const API_KEY = '41899926-74a7536d4d492e936dbb67b5b';
+
 
 refs.form.addEventListener('submit', event => {
   event.preventDefault();
   const query = refs.form.query.value.trim();
+  refs.gallery.innerHTML=''
 
   if (!query) {
     createMessage(
@@ -40,51 +45,15 @@ refs.form.addEventListener('submit', event => {
 
       refs.gallery.innerHTML = createMarkup(data.hits);
       showLoader(false);
-      const simplyGallery = new SimpleLightbox('.gallery-item a', {
-        captionsData: 'alt',
-        captionDelay: 250,
-      });
+      simplyGallery.refresh();
+    
       refs.form.reset();
     })
     .catch(error => console.error(error));
 });
 
-function fetchImages(url) {
-  showLoader(true);
-  return fetch(url).then(resp => {
-    if (!resp.ok) {
-      throw new Error(resp.ststusText);
-    }
-    return resp.json();
-  });
-}
 
-function createMarkup(hits) {
-  return hits
-    .map(
-      ({
-        webformatURL,
-        largeImageURL,
-        tags,
-        likes,
-        views,
-        comments,
-        downloads,
-      }) =>
-        `
-        <li class="gallery-item">
-  <a class="gallery-link" href="${largeImageURL}">
-    <img
-      class="gallery-image"
-      src="${webformatURL}"
-      alt="${tags}"
-    />
-    <p class="gallery-descr">Likes: <span class="descr-span">${likes}</span> Views: <span class="descr-span">${views}</span> Comments: <span class="descr-span">${comments}</span> Downloads: <span class="descr-span">${downloads}</span></p>
-  </a>
-</li>`
-    )
-    .join('');
-}
+
 
 function createMessage(message) {
   iziToast.show({
