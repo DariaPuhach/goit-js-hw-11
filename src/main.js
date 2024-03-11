@@ -3,7 +3,7 @@ import 'simplelightbox/dist/simple-lightbox.min.css';
 
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
-import {BASE_URL, API_KEY, fetchImages} from './js/pixabay-api.js'
+import {ref, showLoader, BASE_URL, API_KEY, fetchImages} from './js/pixabay-api.js'
 import {createMarkup} from './js/render-function.js'
 
 const simplyGallery = new SimpleLightbox('.gallery-item a', {
@@ -15,8 +15,6 @@ const refs = {
   form: document.querySelector('.search-form'),
   input: document.querySelector('.search-inp'),
   gallery: document.querySelector('.gallery'),
-  loader: document.querySelector('.loader'),
-  searchBtn: document.querySelector('.search-btn'),
 };
 
 
@@ -70,7 +68,3 @@ function createMessage(message) {
   });
 }
 
- export function showLoader(state = true) {
-  refs.loader.style.display = !state ? 'none' : 'inline-block';
-  refs.searchBtn.disabled = state;
-}

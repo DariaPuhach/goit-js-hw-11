@@ -1,4 +1,15 @@
- import showLoader from './main.js'
+export const ref = {
+    loader: document.querySelector('.loader'),
+    searchBtn: document.querySelector('.search-btn'),
+}
+
+
+
+export  function showLoader(state = true) {
+    ref.loader.style.display = !state ? 'none' : 'inline-block';
+    ref.searchBtn.disabled = state;
+  }
+  
  
  
  export const BASE_URL = 'https://pixabay.com/api/';
