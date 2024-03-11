@@ -70,7 +70,7 @@ function createMessage(message) {
   });
 }
 
-function showLoader(state = true) {
+ export function showLoader(state = true) {
   refs.loader.style.display = !state ? 'none' : 'inline-block';
   refs.searchBtn.disabled = state;
 }
